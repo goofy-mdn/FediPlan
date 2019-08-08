@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain 'fediplan' %}
+{% block title %}{{ 'common.login'|trans }}{% endblock %}
+
+{% block content %}
+    {% include 'nav.html.twig' %}
+    <h1>Login</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form._token) }}
+
+    {{ form_errors(form) }}
+    {% if flow.getCurrentStepNumber() == 1 %}
+        <div class="row">
+            <div class=" col-md-4">
+                <div class="form-group has-feedback">
+                    {{ form_label(form.host) }}
+                    {{ form_widget(form.host, {'attr': {'class': 'form-control'}}) }}
+                    <span class="fa fa-globe form-control-feedback"></span>
+                    {% if not form.host.vars.errors is empty %}
+                        <span class="label label-danger">
+						{% for errorItem in form.host.vars.errors %}
+                            {{ errorItem.message }}
+                        {% endfor %}
+					</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% elseif flow.getCurrentStepNumber() == 2 %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="alert alert-warning">
+                    {{ 'messages.login_authorization'|trans }}
+                </div>
+                <a href="{{ urlToMastodon }}" target="_blank" class="btn btn-default">  {{ 'messages.authorization_get'|trans }}</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class=" col-md-4">
+                <div class="form-group has-feedback">
+                    {{ form_label(form.code) }}
+                    {{ form_widget(form.code, {'attr': {'class': 'form-control'}}) }}
+                    <span class="fa fa-key form-control-feedback"></span>
+                    {% if not form.code.vars.errors is empty %}
+                        <span class="label label-danger">
+						{% for errorItem in form.code.vars.errors %}
+                            {{ errorItem.message }}
+                        {% endfor %}
+					</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {{ form_widget(form.client_id, {'value' : client_id}) }}
+        {{ form_widget(form.client_secret, {'value' : client_secret}) }}
+    {% endif %}
+    {{ form_widget(form) }}
+    <div class="row">
+        <div class="col-xs-2">
+            <input type="submit" class="btn btn-primary btn-block btn-flat"  value="{{ 'common.next'|trans }}"/>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

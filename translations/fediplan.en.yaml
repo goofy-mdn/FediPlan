@@ -1,0 +1,25 @@
+common:
+  next: Next
+  previous: Previous
+  accounts: Accounts
+  login: Login
+status:
+  visibility:
+    public: Public
+    unlisted: Unlisted
+    private: Private
+    direct: Direct
+
+messages:
+  login_authorization: Please, click on "Get an authorization code" to get you authorization code. Then copy/paste in the field.
+  authorization_get: Get an authorization code
+
+error:
+  general: Something went wrong!
+  instance:
+    mastodon_only: This is not a valid Mastodon instance!
+    mastodon_client_id: Something went wrong when retrieving the client id!
+    mastodon_oauth_url: Something went wrong when getting the authorization URL!
+    mastodon_token: Something went wrong when getting the token!
+    mastodon_account: Something went wrong when retrieving the account!
+    mastodon_account_already_used: This account is already managed by someone else!
