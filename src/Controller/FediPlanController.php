@@ -13,6 +13,7 @@ use App\Form\ConnectMastodonAccountFlow;
 use App\Services\Mastodon_api;
 use App\SocialEntity\Client;
 use App\SocialEntity\Compose;
+use App\SocialEntity\MastodonAccount;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +26,9 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class FediPlanController extends AbstractController
 {
+
+    private $token;
+
     /**
      * @Route("/", name="index")
      */
@@ -84,14 +88,12 @@ class FediPlanController extends AbstractController
                     $token_type = $reply['response']['token_type'];
                     $mastodon_api->set_url("https://" . $client->getHost());
                     $mastodon_api->set_token($access_token, $token_type);
-
                     $accountReply = $mastodon_api->accounts_verify_credentials();
-
                     if( isset($accountReply['error']) ){
                         $form->get('code')->addError(new FormError($translator->trans('error.instance.mastodon_account',[],'fediplan','en')));
                     }else{
-
                         $Account =  $mastodon_api->getSingleAccount($accountReply['response']);
+                        $Account->setToken($token_type ." ".$access_token);
                         $token = new UsernamePasswordToken($Account, null, 'main', array('ROLE_USER'));
                         $this->get('security.token_storage')->setToken($token);
                         $event = new InteractiveLoginEvent($request, $token);
@@ -124,10 +126,14 @@ class FediPlanController extends AbstractController
         $compose = new Compose();
         $form = $this->createForm(ComposeType::class, $compose);
         if ($form->isSubmitted() && $form->isValid($form)) {
-
-
         }
-        return $this->render("fediplan/schedule.html.twig",['form' => $form->createView()]);
+        $user = $this->getUser();
+        /** @var $user MastodonAccount */
+
+        return $this->render("fediplan/schedule.html.twig",[
+            'form' => $form->createView(),
+            'token' => $user->getToken(),
+            ]);
 
     }
 
