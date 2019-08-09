@@ -27,7 +27,6 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 class FediPlanController extends AbstractController
 {
 
-    private $token;
 
     /**
      * @Route("/", name="index")
@@ -74,11 +73,10 @@ class FediPlanController extends AbstractController
 
                 }
             } else if ($flow->getCurrentStep() == 2) {
-
+                $host = $client->getHost();
                 $code = $client->getCode();
                 $mastodon_api->set_url("https://" . $client->getHost());
                 $mastodon_api->set_scopes([]);
-
                 $mastodon_api->set_client($client->getClientId(), $client->getClientSecret());
                 $reply = $mastodon_api->loginAuthorization($code);
                 if( isset($reply['error']) ){
@@ -93,6 +91,7 @@ class FediPlanController extends AbstractController
                         $form->get('code')->addError(new FormError($translator->trans('error.instance.mastodon_account',[],'fediplan','en')));
                     }else{
                         $Account =  $mastodon_api->getSingleAccount($accountReply['response']);
+                        $Account->setInstance($host);
                         $Account->setToken($token_type ." ".$access_token);
                         $token = new UsernamePasswordToken($Account, null, 'main', array('ROLE_USER'));
                         $this->get('security.token_storage')->setToken($token);
@@ -132,6 +131,7 @@ class FediPlanController extends AbstractController
 
         return $this->render("fediplan/schedule.html.twig",[
             'form' => $form->createView(),
+            'instance' => $user->getInstance(),
             'token' => $user->getToken(),
             ]);
 

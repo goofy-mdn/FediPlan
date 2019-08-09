@@ -314,8 +314,10 @@
             $('#fileupload').fileupload({
                 // Uncomment the following to send cross-domain cookies:
                 //xhrFields: {withCredentials: true},
-                headers: [{ name: 'Authorization', value: '{{ token }}' }],
-                url: 'schedule/'
+                beforeSend: function ( xhr ) {
+                    setHeader(xhr);
+                },
+                url: 'https://{{ instance }}/api/v1/media'
             });
 
             // Enable iframe cross-domain access via redirect option:
@@ -370,6 +372,8 @@
                     });
             }
         });
-
+        var setHeader = function (xhr) {
+            xhr.setRequestHeader('Authorization', '{{ token }}');
+        };
     </script>
 {% endblock %}
