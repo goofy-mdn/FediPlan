@@ -42,6 +42,13 @@
             </div>
 
             <div class="row">
+                <div class=" col-md-6">
+                    <div class="form-group has-feedback">
+                        Counter: <span id="count"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class=" col-md-3">
                     <div class="form-group has-feedback">
                         {{ form_label(form.visibility) }}
@@ -106,15 +113,6 @@
                             <i class="glyphicon glyphicon-upload"></i>
                             <span>Start upload</span>
                         </button>
-                        <button type="reset" class="btn btn-warning cancel">
-                            <i class="glyphicon glyphicon-ban-circle"></i>
-                            <span>Cancel upload</span>
-                        </button>
-                        <button type="button" class="btn btn-danger delete">
-                            <i class="glyphicon glyphicon-trash"></i>
-                            <span>Delete selected</span>
-                        </button>
-                        <input type="checkbox" class="toggle" />
                         <!-- The global file processing state -->
                         <span class="fileupload-process"></span>
                     </div>
@@ -200,12 +198,6 @@
                       <button class="btn btn-primary start" disabled>
                           <i class="glyphicon glyphicon-upload"></i>
                           <span>Start</span>
-                      </button>
-                  {% } %}
-                  {% if (!i) { %}
-                      <button class="btn btn-warning cancel">
-                          <i class="glyphicon glyphicon-ban-circle"></i>
-                          <span>Cancel</span>
                       </button>
                   {% } %}
               </td>
@@ -314,8 +306,19 @@
             $('#fileupload').fileupload({
                 // Uncomment the following to send cross-domain cookies:
                 //xhrFields: {withCredentials: true},
+                doka: Doka.create({ utils: ['crop', 'filter', 'color', 'resize'] }),
+                edit:
+                    Doka.supported() &&
+                    function(file) {
+                        return this.doka.edit(file).then(function(output) {
+                            return output && output.file;
+                        });
+                    },
                 beforeSend: function ( xhr ) {
                     setHeader(xhr);
+                },
+                success: function (data) {
+
                 },
                 url: 'https://{{ instance }}/api/v1/media'
             });
@@ -327,53 +330,37 @@
                 window.location.href.replace(/\/[^/]*$/, '/cors/result.html?%s')
             );
 
-            if (window.location.hostname === 'blueimp.github.io') {
-                // Demo settings:
-                $('#fileupload').fileupload('option', {
-                    url: '//jquery-file-upload.appspot.com/',
-                    // Enable image resizing, except for Android and Opera,
-                    // which actually support image resizing, but fail to
-                    // send Blob objects via XHR requests:
-                    disableImageResize: /Android(?!.*Chrome)|Opera/.test(
-                        window.navigator.userAgent
-                    ),
-                    maxFileSize: 999000,
-                    acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
-                });
-                // Upload server status check for browsers with CORS support:
-                if ($.support.cors) {
-                    $.ajax({
-                        url: '//jquery-file-upload.appspot.com/',
-                        type: 'HEAD'
-                    }).fail(function() {
-                        $('<div class="alert alert-danger"/>')
-                            .text('Upload server currently unavailable - ' + new Date())
-                            .appendTo('#fileupload');
-                    });
-                }
-            } else {
-                // Load existing files:
-                $('#fileupload').addClass('fileupload-processing');
-                $.ajax({
-                    // Uncomment the following to send cross-domain cookies:
-                    //xhrFields: {withCredentials: true},
-                    url: $('#fileupload').fileupload('option', 'url'),
-                    dataType: 'json',
-                    context: $('#fileupload')[0]
+            // Load existing files:
+            $('#fileupload').addClass('fileupload-processing');
+            $.ajax({
+                // Uncomment the following to send cross-domain cookies:
+                //xhrFields: {withCredentials: true},
+                url: $('#fileupload').fileupload('option', 'url'),
+                dataType: 'json',
+                context: $('#fileupload')[0]
+            })
+                .always(function() {
+                    $(this).removeClass('fileupload-processing');
                 })
-                    .always(function() {
-                        $(this).removeClass('fileupload-processing');
-                    })
-                    .done(function(result) {
-                        $(this)
-                            .fileupload('option', 'done')
-                            // eslint-disable-next-line new-cap
-                            .call(this, $.Event('done'), { result: result });
-                    });
-            }
+                .done(function(result) {
+                    $(this)
+                        .fileupload('option', 'done')
+                        // eslint-disable-next-line new-cap
+                        .call(this, $.Event('done'), { result: result });
+                });
         });
         var setHeader = function (xhr) {
             xhr.setRequestHeader('Authorization', '{{ token }}');
         };
+    </script>
+
+    <script type="text/javascript">
+        $("#compose_content").keyup(function(){
+            inputText = $(this).val();
+            inputText = inputText
+                .replace(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g, 'xxxxxxxxxxxxxxxxxxxxxxx')
+                .replace(/(^|[^\/\w])@(([a-z0-9_]+)@[a-z0-9\.\-]+[a-z0-9]+)/ig, '$1@$3');
+            $("#count").text(inputText.length);
+        });
     </script>
 {% endblock %}

@@ -13,6 +13,7 @@ use App\SocialEntity\Compose;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -33,7 +34,7 @@ class ComposeType extends AbstractType {
     {
 
         $builder->add('content_warning');
-        $builder->add('content');
+        $builder->add('content', TextareaType::class);
         $builder->add('visibility', ChoiceType::class,
             [
                 'choices' => [
