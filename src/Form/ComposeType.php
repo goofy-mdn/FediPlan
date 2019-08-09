@@ -11,6 +11,7 @@ namespace App\Form;
 
 use App\SocialEntity\Compose;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -44,6 +45,7 @@ class ComposeType extends AbstractType {
                     'status.visibility.direct' => 'direct',
                 ]
             ]);
+        $builder->add('sensitive', CheckboxType::class);
         $builder->add('scheduled_at', \Symfony\Component\Form\Extension\Core\Type\DateTimeType::class,[
             'widget' => 'single_text',
         ]);

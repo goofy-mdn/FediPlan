@@ -48,6 +48,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class=" col-md-3">
                     <div class="form-group has-feedback">
@@ -65,7 +66,21 @@
             </div>
 
 
-
+            <div class="row">
+                <div class=" col-md-3">
+                    <div class="form-group has-feedback">
+                        {{ form_label(form.sensitive) }}
+                        {{ form_widget(form.sensitive) }}
+                        {% if not form.sensitive.vars.errors is empty %}
+                            <span class="label label-danger">
+                                            {% for errorItem in form.sensitive.vars.errors %}
+                                                {{ errorItem.message }}
+                                            {% endfor %}
+                                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
 
             <div class="row">
                 <div class=" col-md-4">
@@ -85,21 +100,17 @@
             </div>
         </div>
 
+
+        <div class="container" style="margin-bottom: 30px;" id="media_container"></div>
+
         <div class="container">
             <!-- The file upload form used as target for the file upload widget -->
             <form
                     id="fileupload"
-                    action="https://jquery-file-upload.appspot.com/"
+                    action="https://{{ instance }}/api/v1/media"
                     method="POST"
                     enctype="multipart/form-data"
             >
-                <!-- Redirect browsers with JavaScript disabled to the origin page -->
-                <noscript
-                ><input
-                            type="hidden"
-                            name="redirect"
-                            value="https://blueimp.github.io/jQuery-File-Upload/"
-                    /></noscript>
                 <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
                 <div class="row fileupload-buttonbar">
                     <div class="col-lg-7">
@@ -107,7 +118,7 @@
                         <span class="btn btn-success fileinput-button">
               <i class="glyphicon glyphicon-plus"></i>
               <span>Add files...</span>
-              <input type="file" name="files[]" multiple />
+              <input type="file" name="file"  />
             </span>
                         <button type="submit" class="btn btn-primary start">
                             <i class="glyphicon glyphicon-upload"></i>
@@ -141,6 +152,7 @@
             </form>
         </div>
     </div>
+
 {% endblock %}
 
 
@@ -319,6 +331,25 @@
                 },
                 success: function (data) {
 
+                    var content;
+                    content = ' <div class="row" id="media_container_'+data.id+'">\n' +
+                    '                <div class="col-md-4">\n' +
+                    '                    <img src="'+data.preview_url+'" style="width:100%;max-width:400px;" id="media_preview_'+data.id+'"/>\n' +
+                    '                </div>\n' +
+                    '                <div class="col-md-6">\n' +
+                    '                    <textarea name="media_description_'+data.id+'" class="form-control"></textarea>\n' +
+                    '                </div>\n' +
+                    '                <input type="hidden" name="media_id_'+data.id+'"/>\n' +
+                    '                <div class="col-md-2">\n' +
+                    '                        <button class="btn btn-danger" class="delete_media" data-id="'+data.id+'">\n' +
+                    '                          <i class="glyphicon glyphicon-trash"></i>\n' +
+                    '                          <span>Delete</span>\n' +
+                    '                      </button>\n' +
+                    '                </div>\n' +
+                    '            </div>'
+
+                    $('#media_container').html($('#media_container').html() + content);
+
                 },
                 url: 'https://{{ instance }}/api/v1/media'
             });
@@ -351,6 +382,7 @@
         });
         var setHeader = function (xhr) {
             xhr.setRequestHeader('Authorization', '{{ token }}');
+            xhr.setRequestHeader('Accept', 'application/json, text/plain, */*');
         };
     </script>
 

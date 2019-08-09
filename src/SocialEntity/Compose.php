@@ -27,6 +27,8 @@ class Compose
 
     private $sent_at;
 
+    private $sensitive;
+
     private $social_account;
 
     private $in_reply_to_id;
@@ -89,6 +91,24 @@ class Compose
         $this->visibility = $visibility;
 
         return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getSensitive()
+    {
+        return $this->sensitive;
+    }
+
+    /**
+     * @param mixed $sensitive
+     */
+    public function setSensitive(bool $sensitive): void
+    {
+        $this->sensitive = $sensitive;
     }
 
     /**
