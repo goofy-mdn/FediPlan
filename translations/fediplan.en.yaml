@@ -3,6 +3,7 @@ common:
   previous: Previous
   accounts: Accounts
   login: Login
+  schedule: Schedule
 status:
   visibility:
     public: Public

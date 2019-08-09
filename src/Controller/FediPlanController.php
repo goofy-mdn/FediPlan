@@ -8,9 +8,11 @@
 
 namespace App\Controller;
 
+use App\Form\ComposeType;
 use App\Form\ConnectMastodonAccountFlow;
 use App\Services\Mastodon_api;
 use App\SocialEntity\Client;
+use App\SocialEntity\Compose;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -118,10 +120,14 @@ class FediPlanController extends AbstractController
      */
     public function schedule()
     {
-        if ($this->get("security.authorization_checker")->isGranted('IS_AUTHENTICATED_FULLY')){
-            $this->redirect($this->generateUrl('schedule'));
+
+        $compose = new Compose();
+        $form = $this->createForm(ComposeType::class, $compose);
+        if ($form->isSubmitted() && $form->isValid($form)) {
+
+
         }
-        return $this->render("fediplan/index.html.twig",[]);
+        return $this->render("fediplan/schedule.html.twig",['form' => $form->createView()]);
 
     }
 

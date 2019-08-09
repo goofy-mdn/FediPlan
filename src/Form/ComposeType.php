@@ -14,6 +14,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Security\Core\Security;
@@ -41,12 +42,6 @@ class ComposeType extends AbstractType {
                     'status.visibility.private' => 'private',
                     'status.visibility.direct' => 'direct',
                 ]
-            ]);
-        $builder->add('attachments', CollectionType::class,
-            [
-                "allow_add" => true,
-                "allow_delete" => true,
-                'entry_type' => FileType::class,
             ]);
         $builder->add('scheduled_at', \Symfony\Component\Form\Extension\Core\Type\DateTimeType::class,[
             'widget' => 'single_text',
