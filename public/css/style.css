@@ -1,11 +1,21 @@
+html, body {
+    height: 100%;
+}
+
+#wrap {
+    min-height: 100%;
+}
+
+#main_contain {
+    overflow:auto;
+    padding-bottom:150px;
+}
 .footer {
+    position: relative;
+    margin-top: -150px;
     padding: 10px;
-    width: 100%;
+    clear:top;
     height: 150px;
     background-color: #f5f5f5;
 }
-#main_contain {
-    display: table;
-    width: 100%;
-    height: 100%;
-}
+
