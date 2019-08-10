@@ -73,6 +73,33 @@ class Mastodon_api {
         return $response;
     }
 
+
+    /**
+     * _put
+     *
+     * HTTP API put
+     *
+     * @param   string $url
+     * @param   array $parameters
+     *
+     * @return  array       $response
+     * @throws \ErrorException
+     */
+    private function _put ($url, $parameters = array()) {
+
+        $params["method"] = "PUT";
+        // set access_token
+        if (isset($this->token['access_token'])) {
+            $params['headers'] = array(
+                'Authorization' => $this->token['token_type'] . ' ' . $this->token['access_token']
+            );
+        }
+        $params['body'] = $parameters;
+        $url = $this->mastodon_url.$url;
+        $response = $this->get_content_remote($url,$params);
+        return $response;
+    }
+
     /**
      * _get
      *
@@ -203,10 +230,13 @@ class Mastodon_api {
                 $url .= "&max_id=".$parameters['body']['max_id'];
             $parameters['body'] = [];
         }
+
         if( isset($parameters["method"]) && $parameters['method'] == "POST" )
             $response = $curl->post($url, $parameters['body'] );
         else if( isset($parameters["method"]) && $parameters['method'] == "GET" )
             $response = $curl->get($url, $parameters['body']  );
+        else if( isset($parameters["method"]) && $parameters['method'] == "PUT" )
+            $response = $curl->put($url, $parameters['body']  );
         else if( isset($parameters["method"]) && $parameters['method'] == "PATCH" )
             $response = $curl->patch($url, $parameters['body']  );
         else if( isset($parameters["method"]) && $parameters['method'] == "DELETE" )
@@ -968,6 +998,22 @@ class Mastodon_api {
     }
 
     /**
+     * post_media
+     *
+     * @param   string $id
+     *          array $parameters
+     *          string      $parameters['description']          (optional): A plain-text description of the media for accessibility (max 420 chars)
+     *          array       $parameters['focus']                (optional):Two floating points, comma-delimited. See focal points
+     *
+     * @return  array       $response
+     * @throws \ErrorException
+     */
+    public function update_media ($id, $parameters) {
+        $response = $this->_put('/api/v1/media/'.$id, $parameters);
+        return $response;
+    }
+
+    /**
      * post_statuses
      *
      * @param   array $parameters
@@ -1100,6 +1146,11 @@ class Mastodon_api {
         $response = $this->_get('/api/v1/timelines/tag/'.$hashtag,$parameters);
         return $response;
     }
+
+
+    /***
+     * Custom management added by @tom79 https://github.com/stom79/
+     */
 
 
     /**

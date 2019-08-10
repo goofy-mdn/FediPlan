@@ -14,9 +14,12 @@ use App\Services\Mastodon_api;
 use App\SocialEntity\Client;
 use App\SocialEntity\Compose;
 use App\SocialEntity\MastodonAccount;
+use DateTime;
+use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -119,34 +122,78 @@ class FediPlanController extends AbstractController
     /**
      * @Route("/schedule", name="schedule")
      */
-    public function schedule(Request $request)
+    public function schedule(Request $request, Mastodon_api $mastodon_api)
     {
 
         $compose = new Compose();
         $form = $this->createForm(ComposeType::class, $compose);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
             /** @var $data Compose */
-            echo "<pre>",print_r($data),"</pre>";
+            $data = $form->getData();
+            /* @var $user MastodonAccount */
+            $user = $this->getUser();
+            $mastodon_api->set_url("https://" . $user->getInstance());
+
+            $token = explode(" " ,$user->getToken())[1];
+            $type = explode(" ", $user->getToken())[0];
+            $mastodon_api->set_token($token, $type);
+            $params = [];
+            //Update media description and store their id
             foreach ($_POST as $key => $value){
                 if( $key != "compose"){
+
                     if (strpos($key, 'media_id_') !== false){
+
                         $mediaId = $value;
                         $description = $_POST['media_description_'.$mediaId];
+                        //update description if needed
                         if( $description != null && trim($description) != ""){
-                            //TODO: update description
+                            try {
+                                $res = $mastodon_api->update_media($mediaId, ['description' => $description]);
+                            } catch (\ErrorException $e) {}
                         }
+                        $params['media_ids'][] = $mediaId;
                     }
                 }
             }
-            $cw = $data->getContentWarning();
-            $content = $data->getContent();
-            $visibility = $data->getVisibility();
-            $scheduled_at = $data->getScheduledAt();
-            $sensitive = $data->getSensitive();
-            $timezone = $data->getTimeZone();
+            //Schedule status
+            if( $data->getContentWarning() ){
+                $params['spoiler_text'] = $data->getContentWarning();
+            }
+            if( $data->getContent() ){
+                $params['status'] = $data->getContent();
+            }
+            if( $data->getVisibility() ){
+                $params['visibility'] = $data->getVisibility();
+            }
+            $params['sensitive'] = ($data->getSensitive() == null || !$data->getSensitive())?false:true;
 
+            try {
+                $date = new DateTime( $data->getScheduledAt()->format("Y-m-d H:i:s"), new DateTimeZone($data->getTimeZone()) );
+                $date->setTimezone(  new DateTimeZone("UTC"));
+                $params['scheduled_at'] = $date->format('c');
+            } catch (\Exception $e) {}
+            try {
+                $response = $mastodon_api->post_statuses($params);
+            } catch (\ErrorException $e) {}
+            $session = $request->getSession();
+            if( isset($response['error']) ){
+                $session->getFlashBag()->add(
+                    'Error',
+                    $response['error_message']
+                );
+                $form->get('content')->addError(new FormError( $response['error_message']));
+            }else{
+                unset($compose);
+                unset($form);
+                $compose = new Compose();
+                $session->getFlashBag()->add(
+                    'Success',
+                    'The message has been scheduled'
+                );
+                $form = $this->createForm(ComposeType::class, $compose);
+            }
         }
         $user = $this->getUser();
         /** @var $user MastodonAccount */

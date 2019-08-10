@@ -132,12 +132,12 @@ class Compose
         return $this;
     }
 
-    public function getScheduledAt(): ?\DateTimeInterface
+    public function getScheduledAt(): ?\DateTime
     {
         return $this->scheduled_at;
     }
 
-    public function setScheduledAt(?\DateTimeInterface $scheduled_at): self
+    public function setScheduledAt(?\DateTime $scheduled_at): self
     {
         $this->scheduled_at = $scheduled_at;
 
