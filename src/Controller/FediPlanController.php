@@ -213,11 +213,6 @@ class FediPlanController extends AbstractController
     public function scheduled()
     {
 
-        if ($this->get("security.authorization_checker")->isGranted('IS_AUTHENTICATED_FULLY')){
-            $number = random_int(0, 100);
-        }else{
-            $number = 0;
-        }
         return $this->render("fediplan/index.html.twig");
     }
 
@@ -227,11 +222,6 @@ class FediPlanController extends AbstractController
     public function logout()
     {
 
-        if ($this->get("security.authorization_checker")->isGranted('IS_AUTHENTICATED_FULLY')){
-            $number = random_int(0, 100);
-        }else{
-            $number = 0;
-        }
         return $this->render("fediplan/index.html.twig");
     }
 

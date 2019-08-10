@@ -8,6 +8,8 @@ security:
             security: false
         main:
             anonymous: ~
+            logout:
+                path:   logout
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication

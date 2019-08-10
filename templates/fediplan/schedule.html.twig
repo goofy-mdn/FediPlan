@@ -81,7 +81,7 @@
             <div class="row">
                 <div class=" col-md-6">
                     <div class="form-group has-feedback">
-                        Counter: <span id="count"></span>
+                        Counter: <span id="count">0</span>
                     </div>
                 </div>
             </div>
@@ -403,7 +403,8 @@
                     $('#media_container').html($('#media_container').html() + content);
 
                 },
-                url: 'https://{{ instance }}/api/v1/media'
+                url: 'https://{{ instance }}/api/v1/media',
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png|mp4|mp3)$/i
             });
 
             // Enable iframe cross-domain access via redirect option:
