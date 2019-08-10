@@ -28,4 +28,3 @@ See: [Download Composer](https://getcomposer.org/download/)
     1. Polls
     2. Autocompletion for mentions, tags and emojis
     3. Check and edit scheduled statuses.
-    4. Delete media once submitted 
