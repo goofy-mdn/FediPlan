@@ -56,7 +56,7 @@ class FediPlanController extends AbstractController
                 }else{
                     $mastodon_api->set_url("https://" . $host);
                     $mastodon_api->set_scopes([]);
-                    $createApp = $mastodon_api->create_app("FediPlan", [], '', "https://fediplan.fedilab.app");
+                    $createApp = $mastodon_api->create_app("FediPlan", [], '', "https://plan.fedilab.app");
                     if( isset($createApp['error']) ){
                         $form->get('host')->addError(new FormError($translator->trans('error.instance.mastodon_client_id',[],'fediplan','en')));
                     }else{
