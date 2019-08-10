@@ -17,29 +17,37 @@ class Compose
 
     private $visibility;
 
-    private $attachments;
-
     private $created_at;
 
     private $scheduled_at;
-
-    private $scheduled;
 
     private $sent_at;
 
     private $sensitive;
 
-    private $social_account;
-
     private $in_reply_to_id;
 
-    private $isSensitive;
+    private $timeZone;
 
+    /**
+     * @return mixed
+     */
+    public function getTimeZone()
+    {
+        return $this->timeZone;
+    }
+
+    /**
+     * @param mixed $timeZone
+     */
+    public function setTimeZone($timeZone): void
+    {
+        $this->timeZone = $timeZone;
+    }
 
 
 
     public function getTotalMedia(){
-        return count($this->getAttachments());
     }
 
 
@@ -111,31 +119,6 @@ class Compose
         $this->sensitive = $sensitive;
     }
 
-    /**
-     * @return Collection|Media[]
-     */
-    public function getAttachments(): Collection
-    {
-        return $this->attachments;
-    }
-
-    public function addAttachment(Media $attachment): self
-    {
-        if (!$this->attachments->contains($attachment)) {
-            $this->attachments[] = $attachment;
-        }
-
-        return $this;
-    }
-
-    public function removeAttachment(Media $attachment): self
-    {
-        if ($this->attachments->contains($attachment)) {
-            $this->attachments->removeElement($attachment);
-        }
-
-        return $this;
-    }
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -160,74 +143,6 @@ class Compose
 
         return $this;
     }
-    
-
-    public function getScheduled(): ?bool
-    {
-        return $this->scheduled;
-    }
-
-    public function setScheduled(bool $scheduled): self
-    {
-        $this->scheduled = $scheduled;
-
-        return $this;
-    }
-
-    public function getSentAt(): ?\DateTimeInterface
-    {
-        return $this->sent_at;
-    }
-
-    public function setSentAt(?\DateTimeInterface $sent_at): self
-    {
-        $this->sent_at = $sent_at;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|MastodonAccount[]
-     */
-    public function getAccount(): Collection
-    {
-        return $this->social_account;
-    }
-
-    public function addAccount(MastodonAccount $social_account): self
-    {
-        if (!$this->social_account->contains($social_account)) {
-            $this->social_account[] = $social_account;
-            $social_account->setMessage($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAccount(MastodonAccount $social_account): self
-    {
-        if ($this->social_account->contains($social_account)) {
-            $this->social_account->removeElement($social_account);
-            // set the owning side to null (unless already changed)
-            if ($social_account->getMessage() === $this) {
-                $social_account->setMessage(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getSocialAccount(): ?MastodonAccount
-    {
-        return $this->social_account;
-    }
-
-    public function setSocialAccount(?MastodonAccount $social_account): self
-    {
-        $this->social_account = $social_account;
-
-        return $this;
-    }
 
     public function getInReplyToId(): ?string
     {
@@ -241,17 +156,6 @@ class Compose
         return $this;
     }
 
-    public function getIsSensitive(): ?bool
-    {
-        return $this->isSensitive;
-    }
-
-    public function setIsSensitive(?bool $isSensitive): self
-    {
-        $this->isSensitive = $isSensitive;
-
-        return $this;
-    }
 
 
 }

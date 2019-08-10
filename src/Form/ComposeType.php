@@ -14,7 +14,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,8 +37,8 @@ class ComposeType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-        $builder->add('content_warning');
-        $builder->add('content', TextareaType::class);
+        $builder->add('content_warning', TextType::class, ['required' => false]);
+        $builder->add('content', TextareaType::class, ['required' => false]);
         $builder->add('visibility', ChoiceType::class,
             [
                 'choices' => [
@@ -45,10 +48,14 @@ class ComposeType extends AbstractType {
                     'status.visibility.direct' => 'direct',
                 ]
             ]);
-        $builder->add('sensitive', CheckboxType::class);
+        $builder->add('timeZone', TimezoneType::class);
+        $builder->add('sensitive', CheckboxType::class,  ['required' => false]);
         $builder->add('scheduled_at', \Symfony\Component\Form\Extension\Core\Type\DateTimeType::class,[
             'widget' => 'single_text',
+            "data" => new \DateTime()
         ]);
+        $builder->add('Send', SubmitType::class, ['attr' => ['class' => "btn btn-primary "]]);
+
     }
 
 

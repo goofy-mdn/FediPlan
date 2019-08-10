@@ -119,12 +119,34 @@ class FediPlanController extends AbstractController
     /**
      * @Route("/schedule", name="schedule")
      */
-    public function schedule()
+    public function schedule(Request $request)
     {
 
         $compose = new Compose();
         $form = $this->createForm(ComposeType::class, $compose);
-        if ($form->isSubmitted() && $form->isValid($form)) {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            /** @var $data Compose */
+            echo "<pre>",print_r($data),"</pre>";
+            foreach ($_POST as $key => $value){
+                if( $key != "compose"){
+                    if (strpos($key, 'media_id_') !== false){
+                        $mediaId = $value;
+                        $description = $_POST['media_description_'.$mediaId];
+                        if( $description != null && trim($description) != ""){
+                            //TODO: update description
+                        }
+                    }
+                }
+            }
+            $cw = $data->getContentWarning();
+            $content = $data->getContent();
+            $visibility = $data->getVisibility();
+            $scheduled_at = $data->getScheduledAt();
+            $sensitive = $data->getSensitive();
+            $timezone = $data->getTimeZone();
+
         }
         $user = $this->getUser();
         /** @var $user MastodonAccount */
