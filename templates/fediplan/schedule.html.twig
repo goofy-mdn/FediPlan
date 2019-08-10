@@ -393,7 +393,7 @@
                     '                </div>\n' +
                     '                <input type="hidden" name="media_id_'+data.id+'" value="'+data.id+'"/>\n' +
                     '                <div class="col-md-2">\n' +
-                    '                        <button class="btn btn-danger" class="delete_media" data-id="'+data.id+'">\n' +
+                    '                        <button type="button" class="btn btn-danger delete_media" data-id="'+data.id+'">\n' +
                     '                          <i class="glyphicon glyphicon-trash"></i>\n' +
                     '                          <span>Delete</span>\n' +
                     '                      </button>\n' +
@@ -447,7 +447,14 @@
                 .replace(/(^|[^\/\w])@(([a-z0-9_]+)@[a-z0-9\.\-]+[a-z0-9]+)/ig, '$1@$3');
             $("#count").text(inputText.length);
         });
-        var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        $('#compose_timeZone').val(timezone);
+
+        $(document).ready(function() {
+            var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            $('#compose_timeZone').val(timezone);
+            $(document).on('click', '.delete_media', function () {
+                var id = $(this).attr('data-id');
+                $('#media_container_' + id).remove();
+            })
+        });
     </script>
 {% endblock %}
