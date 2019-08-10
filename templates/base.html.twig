@@ -10,7 +10,7 @@
 
 
     <title>{% block title %}{{ rss_feed_title }}{% endblock %}</title>
-
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     {% endblock %}
@@ -28,10 +28,27 @@
 
 <body>
 
-<div class="container" style="margin-top: 80px;">
+<div class="container" style="margin-top: 80px;" id="main_contain">
     {% block content %}{% endblock %}
 </div>
 
+
+<footer class="footer">
+    <div class="container">
+       <div class="row">
+           <div class="col-md-4" style="margin-top: 10px; text-align: center;">
+               FediPlan -{{ "now"|date("Y") }} <br/>
+               License: <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html" target="_blank">GPL 3</a>
+           </div>
+           <div class="col-md-4" style="margin-top: 10px; text-align: center;">
+               Author: Thomas<br/>
+               Mastodon: <a href="https://framapiaf.org/@fedilab" target="_blank">@Fedilab</a><br/>
+               Framagit: <a href="https://framagit.org/tom79/" target="_blank">@tom79</a><br/>
+               Github: <a href="https://github.com/stom79/" target="_blank">@stom79</a><br/>
+           </div>
+       </div>
+    </div>
+</footer>
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
