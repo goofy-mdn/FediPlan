@@ -213,15 +213,14 @@ class FediPlanController extends AbstractController
      */
     public function scheduled()
     {
-
         return $this->render("fediplan/scheduled.html.twig");
     }
 
 
     /**
-     * @Route("/scheduled/messages/{max_id}", name="load_more", options={"expose"=true})
+     * @Route("/scheduled/messages/{max_id}",  options={"expose"=true}, name="load_more")
      */
-    public function loadMoreAction(Request $request, Mastodon_api $mastodon_api, String $max_id = null){
+    public function loadMoreAction(Mastodon_api $mastodon_api, String $max_id = null){
 
 
         $user = $this->getUser();
@@ -249,10 +248,9 @@ class FediPlanController extends AbstractController
     }
 
     /**
-     * @Method({"POST"})
-     * @Route("/scheduled/delete/messages/{id}", name="delete_message", options={"expose"=true})
+     * @Route("/scheduled/delete/messages/{id}", options={"expose"=true}, name="delete_message", methods={"POST"})
      */
-    public function deleteMessage(Request $request, Mastodon_api $mastodon_api, String $id = null){
+    public function deleteMessage(Mastodon_api $mastodon_api, String $id = null){
 
 
         $user = $this->getUser();
@@ -273,7 +271,6 @@ class FediPlanController extends AbstractController
      */
     public function logout()
     {
-
         return $this->render("fediplan/index.html.twig");
     }
 
