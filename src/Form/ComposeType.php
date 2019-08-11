@@ -39,7 +39,7 @@ class ComposeType extends AbstractType {
         /**@var $user \App\SocialEntity\MastodonAccount**/
         $user = $options['user'];
 
-        if( $user && $user->getDefaultSensitivity()) {
+        if( $user->getDefaultSensitivity()) {
             $checkbox = [
                 'required' => false,
                 'attr' => ['checked' => 'checked'],
@@ -58,7 +58,7 @@ class ComposeType extends AbstractType {
                     'status.visibility.private' => 'private',
                     'status.visibility.direct' => 'direct',
                 ],
-                'data' => $user?$user->getDefaultVisibility():'public',
+                'data' => $user->getDefaultVisibility(),
             ]);
         $builder->add('timeZone', TimezoneType::class);
         $builder->add('sensitive', CheckboxType::class, $checkbox);
