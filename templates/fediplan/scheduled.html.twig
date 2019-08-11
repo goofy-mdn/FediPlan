@@ -65,7 +65,6 @@
                     .done(function(data) {
                         $("#content").append(data.html);
                         $('#loader').addClass("d-none");
-                        console.log( data);
                         if( typeof data.html != "undefined" && data.html != "") {
                            // $("#no_content").addClass("d-none");
                         }else{
