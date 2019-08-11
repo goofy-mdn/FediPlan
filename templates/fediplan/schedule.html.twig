@@ -362,6 +362,7 @@
     <script src="{{ asset('js/jQuery-File-Upload-10.1.0/js/jquery.fileupload-video.js') }}"></script>
     <script src="{{ asset('js/jQuery-File-Upload-10.1.0/js/jquery.fileupload-validate.js') }}"></script>
     <script src="{{ asset('js/jQuery-File-Upload-10.1.0/js/jquery.fileupload-ui.js') }}"></script>
+    <script src="{{ asset('js/moment.js') }}"></script>
     <script type="text/javascript">
         $(function() {
             'use strict';
@@ -455,6 +456,12 @@
                 var id = $(this).attr('data-id');
                 $('#media_container_' + id).remove();
             })
+            var language = navigator.languages && navigator.languages[0] ||
+                navigator.language ||
+                navigator.userLanguage;
+            var format = 'YYYY/MM/DD HH:mm:ss ZZ';
+            moment(time, format).tz(zone).format(format);
+            var currentDate = new Date().toLocaleString(language, { timeZone: timezone })
         });
     </script>
 {% endblock %}

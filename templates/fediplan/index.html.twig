@@ -15,8 +15,12 @@
             <div class=" col-md-4">
                 <div class="form-group has-feedback">
                     {{ form_label(form.host) }}
-                    {{ form_widget(form.host, {'attr': {'class': 'form-control'}}) }}
-                    <span class="fa fa-globe form-control-feedback"></span>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-globe"></i></span>
+                        </div>
+                        {{ form_widget(form.host, {'attr': {'class': 'form-control'}}) }}
+                    </div>
                     {% if not form.host.vars.errors is empty %}
                         <span class="label label-danger">
 						{% for errorItem in form.host.vars.errors %}
@@ -40,8 +44,13 @@
             <div class=" col-md-4">
                 <div class="form-group has-feedback">
                     {{ form_label(form.code) }}
-                    {{ form_widget(form.code, {'attr': {'class': 'form-control'}}) }}
-                    <span class="fa fa-key form-control-feedback"></span>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-key"></i></span>
+                        </div>
+                        {{ form_widget(form.code, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+
                     {% if not form.code.vars.errors is empty %}
                         <span class="label label-danger">
 						{% for errorItem in form.code.vars.errors %}
@@ -57,7 +66,7 @@
     {% endif %}
     {{ form_widget(form) }}
     <div class="row">
-        <div class="col-xs-2">
+        <div class="col-md-2">
             <input type="submit" class="btn btn-primary btn-block btn-flat"  value="{{ 'common.next'|trans }}"/>
         </div>
     </div>
