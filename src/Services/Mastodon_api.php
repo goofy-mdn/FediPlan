@@ -170,7 +170,6 @@ class Mastodon_api {
                 'Authorization' => $this->token['token_type'] . ' ' . $this->token['access_token']
             );
         }
-
         $url = $this->mastodon_url.$url;
         $response = $this->get_content_remote($url,$parameters);
         return $response;
@@ -230,7 +229,6 @@ class Mastodon_api {
                 $url .= "&max_id=".$parameters['body']['max_id'];
             $parameters['body'] = [];
         }
-
         if( isset($parameters["method"]) && $parameters['method'] == "POST" )
             $response = $curl->post($url, $parameters['body'] );
         else if( isset($parameters["method"]) && $parameters['method'] == "GET" )
@@ -240,7 +238,8 @@ class Mastodon_api {
         else if( isset($parameters["method"]) && $parameters['method'] == "PATCH" )
             $response = $curl->patch($url, $parameters['body']  );
         else if( isset($parameters["method"]) && $parameters['method'] == "DELETE" )
-            $response = $curl->delete($url, $parameters['body']  );
+            $response = $curl->delete($url);
+
         $min_id = null;
         $max_id = null;
         if( $response->response_headers) {
@@ -1048,6 +1047,22 @@ class Mastodon_api {
         return $response;
     }
 
+
+    /**
+     * delete_scheduled
+     *
+     * Deleting a scheduled status
+     *
+     * @param   int $id
+     *
+     * @return  array   $response       empty
+     * @throws \ErrorException
+     */
+    public function delete_scheduled ($id) {
+        $response = $this->_delete('/api/v1/scheduled_statuses/'.$id);
+        return $response;
+    }
+
     /**
      * statuses_reblog
      *
@@ -1105,6 +1120,20 @@ class Mastodon_api {
      */
     public function statuses_unfavourite ($id) {
         $response = $this->_post('/api/v1/statuses/'.$id.'/unfavourite');
+        return $response;
+    }
+
+
+    /**
+     * scheduled_statuses
+     *
+     * @param   array $parameters
+     *
+     * @return  array   $response
+     * @throws \ErrorException
+     */
+    public function get_scheduled ($parameters = array()) {
+        $response = $this->_get('/api/v1/scheduled_statuses/', $parameters);
         return $response;
     }
 
@@ -1338,6 +1367,8 @@ class Mastodon_api {
         return $statuses;
     }
 
+
+
     /**
      * getSingleNotification Hydrate a Notification from API reply
      * @param $notificationParams
@@ -1451,6 +1482,95 @@ class Mastodon_api {
         return $status;
     }
 
+
+
+
+    /**
+     * getScheduledStatuses Hydrate an array of Scheduled Status from API reply
+     * @param $statusParams
+     * @return array
+     */
+    public function getScheduledStatuses($statusParams, $account){
+        $statuses = [];
+        foreach ($statusParams as $statusParam)
+            $statuses[] = $this->getSingleScheduledStatus($statusParam, $account);
+        return $statuses;
+    }
+
+
+    /**
+     * getSingleScheduledStatus Hydrate a scheduled Status from API reply
+     * @param $statusParams
+     * @return Status
+     */
+    public function getSingleScheduledStatus($statusParams, $account){
+
+        $status = new Status();
+        $status->setId($statusParams['id']);
+        $status->setInReplyToId($statusParams['params']['in_reply_to_id']);
+        $status->setContent($statusParams['params']['text']);
+        $status->setScheduledAt($this->stringToDate($statusParams['scheduled_at']));
+        $status->setAccount($account);
+        if(  isset($statusParams['emojis']) && count($statusParams['emojis']) > 0){
+            $emojis = [];
+            foreach ($statusParams['emojis'] as $_e){
+                $emoji = new Emoji();
+                $emoji->setUrl($_e['url']);
+                $emoji->setShortcode($_e['shortcode']);
+                $emoji->setStaticUrl($_e['static_url']);
+                $emoji->setVisibleInPicker($_e['visible_in_picker']);
+                $emojis[] = $emoji;
+            }
+            $status->setEmojis($emojis);
+        }
+        $status->setSensitive($statusParams['params']['sensitive']);
+        $status->setSpoilerText($statusParams['params']['spoiler_text']);;
+        $status->setVisibility($statusParams['params']['visibility']);
+        if(  isset($statusParams['media_attachments']) && count($statusParams['media_attachments']) > 0){
+            $media_attachments = [];
+            foreach ($statusParams['media_attachments'] as $_m){
+                $attachment = new Attachment();
+                $attachment->setId($_m['id']);
+                $attachment->setUrl($_m['url']);
+                $attachment->setType($_m['type']);
+                if($_m['remote_url'])
+                    $attachment->setRemoteUrl($_m['remote_url']);
+                $attachment->setPreviewUrl($_m['preview_url']);
+                if($_m['text_url'])
+                    $attachment->setTextUrl($_m['text_url']);
+                $attachment->setMeta(serialize($_m['meta']));
+                if($_m['description'])
+                    $attachment->setDescription($_m['description']);
+                $media_attachments[] = $attachment;
+            }
+            $status->setMediaAttachments($media_attachments);
+        }
+        if( isset($statusParams['mentions']) && count($statusParams['mentions']) > 0){
+            $mentions = [];
+            foreach ($statusParams['mentions'] as $_m){
+                $mention = new Mention();
+                $mention->setUrl($_m['url']);
+                $mention->setAcct($_m['acct']);
+                $mention->setUsername($_m['username']);
+                $mention->setId($_m['id']);
+                $mentions[] = $mention;
+            }
+            $status->setMentions($mentions);
+        }
+
+        if( isset($statusParams['tags']) && count($statusParams['tags']) > 0){
+            $tags = [];
+            foreach ($statusParams['tags'] as $_t){
+                $tag = new Tag();
+                $tag->setUrl($_t['url']);
+                $tag->setName($_t['name']);
+                $tag->setHistory(isset($_t['history'])?$_t['history']:[]);
+                $tags[] = $tag;
+            }
+            $status->setTags($tags);
+        }
+        return $status;
+    }
 
     /**
      * getSingleAttachment Hydrate an Attachment from API reply

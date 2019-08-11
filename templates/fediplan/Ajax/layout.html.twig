@@ -1,0 +1,43 @@
+{# @var status \App\SocialEntity\Status #}
+{% for status in statuses %}
+
+    <div class="row" id="message_container_{{ status.getId()  }}" style="margin-bottom: 20px;">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-horizontal" style=" display: flex;flex: 1 1 auto;">
+                    <div class="img-square-wrapper">
+                        <img class="" width="80" src="{{ status.account.avatar  }}" style=" border-radius: 5%; margin: 5px;">
+                    </div>
+                    <div class="card-body">
+                        <span class="card-title" style="size: 1.1em;">{{ convertAccountEmoji(status.account , status.account.displayName) | raw }} - @{{ status.account.acct  }}</span>
+                        <p class="card-text">
+                            {% if status.spoilerText is defined %}
+                                <b>{{ status.spoilerText  }}</b> <br/>
+                            {% endif %}
+                            {{ status.content  }}
+                        </p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">
+                        {% if status.visibility == "public" %}
+                            <i class="fa fa-globe"></i>
+                        {% elseif status.visibility == "unlisted" %}
+                            <i class="fa fa-unlock-alt"></i>
+                        {% elseif status.visibility == "private" %}
+                            <i class="fa fa-lock"></i>
+                        {% elseif status.visibility == "direct" %}
+                            <i class="fa fa-envelope"></i>
+                        {% endif %}
+                    </small> - {{ status.scheduledAt | date('d/m/y H:m')   }}
+                    <button class="btn btn-danger small" data-record-id="{{ status.getId() }}"  style="position: absolute;right: 5px;bottom: 5px;"
+
+                            data-record-title="{{ status.content }} - {{ status.scheduledAt | date('d/m/y H:m')  }}"
+                            data-toggle="modal" data-target="#confirm-delete"
+                    >X</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endfor %}

@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain 'fediplan' %}
+{% block title %}{{ 'common.scheduled'|trans }}{% endblock %}
+
+{% block content %}
+    {% include 'nav.html.twig' %}
+    <h1>Scheduled</h1>
+
+
+
+    <div class="row container">
+        <div class="col-md-12" id="content"></div>
+    </div>
+    <div class="row container hide" id="loader" style="text-align: center;margin-top: 50px;"><div class="lds-ring"><div></div><div></div><div></div><div></div></div></div>
+    <div class="row hide" id="no_content" style="margin-top: 50px;">
+        <div class="col-md-offset-3 col-md-6">
+            <div class="alert alert-warning"  style="font-size: 1.5em;text-align: center;">No results found!</div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <p>You are about to delete <b><i class="title"></i></b></p>
+                    <p>Do you want to proceed?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger btn-ok">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            window.max_id = "";
+            $(window).scroll(function() {
+
+                if(($(window).scrollTop() == $(document).height() - $(window).height() )&& max_id != null) {
+                   loadMore();
+                }
+            });
+            loadMore(null);
+
+            function loadMore(){
+                if(max_id == null || max_id === ""){
+                    $('#loader').removeClass("d-none");
+                }
+                $("#no_content").addClass("d-none");
+                $.get( Routing.generate('load_more', { 'max_id': window.max_id }  ))
+                    .done(function(data) {
+                        $("#content").append(data.html);
+                        $('#loader').addClass("d-none");
+                        console.log( data);
+                        if( typeof data.html != "undefined" && data.html != "") {
+                           // $("#no_content").addClass("d-none");
+                        }else{
+                            $("#no_content").removeClass("d-none");
+                        }
+                        window.max_id = data.max_id;
+                    })
+                    .fail(function() {
+                        $('#loader').addClass("d-none");
+                    })
+            }
+
+        });
+
+
+        $('#confirm-delete').on('click', '.btn-ok', function(e) {
+            var $modalDiv = $(e.delegateTarget);
+            var id = $(this).data('recordId');
+            $.post( Routing.generate('delete_message', { 'id': id }  ))
+                .done(function(data) {
+                    $("#message_container_"+id).remove();
+                    $('#confirm-delete').modal('hide');
+                    $modalDiv.modal('hide').removeClass('loading');
+                })
+                .fail(function() {
+                    $('#loader').addClass("d-none");
+                    $modalDiv.modal('hide').removeClass('loading');
+                })
+            $modalDiv.addClass('loading');
+        });
+        $('#confirm-delete').on('show.bs.modal', function(e) {
+            var data = $(e.relatedTarget).data();
+            $('.title', this).text(data.recordTitle);
+            $('.btn-ok', this).data('recordId', data.recordId);
+        });
+    </script>
+{% endblock %}

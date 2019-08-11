@@ -16,10 +16,11 @@ use App\SocialEntity\Compose;
 use App\SocialEntity\MastodonAccount;
 use DateTime;
 use DateTimeZone;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -213,7 +214,58 @@ class FediPlanController extends AbstractController
     public function scheduled()
     {
 
-        return $this->render("fediplan/index.html.twig");
+        return $this->render("fediplan/scheduled.html.twig");
+    }
+
+
+    /**
+     * @Route("/scheduled/messages/{max_id}", name="load_more", options={"expose"=true})
+     */
+    public function loadMoreAction(Request $request, Mastodon_api $mastodon_api, String $max_id = null){
+
+
+        $user = $this->getUser();
+        /** @var $mastodon_api Mastodon_api */
+        $mastodon_api->set_url("https://" . $user->getInstance());
+
+        $token = explode(" " ,$user->getToken())[1];
+        $type = explode(" ", $user->getToken())[0];
+        $mastodon_api->set_token($token, $type);
+
+        $params = [];
+
+        if( $max_id != null){
+            $params['max_id'] = $max_id;
+        }
+        $scheduled_reply = [];
+        try {
+            $scheduled_reply = $mastodon_api->get_scheduled($params);
+        } catch (\ErrorException $e) {
+        }
+        $statuses = $mastodon_api->getScheduledStatuses($scheduled_reply['response'], $this->getUser());
+        $data['max_id'] = $scheduled_reply['max_id'];
+        $data['html'] = $this->renderView('fediplan/Ajax/layout.html.twig', ['statuses' => $statuses]);
+        return new JsonResponse($data);
+    }
+
+    /**
+     * @Method({"POST"})
+     * @Route("/scheduled/delete/messages/{id}", name="delete_message", options={"expose"=true})
+     */
+    public function deleteMessage(Request $request, Mastodon_api $mastodon_api, String $id = null){
+
+
+        $user = $this->getUser();
+        /** @var $mastodon_api Mastodon_api */
+        $mastodon_api->set_url("https://" . $user->getInstance());
+        $token = explode(" " ,$user->getToken())[1];
+        $type = explode(" ", $user->getToken())[0];
+        $mastodon_api->set_token($token, $type);
+        $response = [];
+        try {
+            $response = $mastodon_api->delete_scheduled($id);
+        } catch (\ErrorException $e) {}
+        return new JsonResponse($response);
     }
 
     /**

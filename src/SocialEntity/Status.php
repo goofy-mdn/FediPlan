@@ -4,9 +4,6 @@ namespace App\SocialEntity;
 
 
 
-use App\Entity\Emoji;
-use App\Entity\MastodonAccount;
-
 class Status
 {
     /** @var string */
@@ -25,6 +22,8 @@ class Status
     private $content;
     /** @var \DateTime */
     private $created_at;
+    /** @var \DateTime */
+    private $scheduled_at;
     /** @var Emoji[] */
     private $emojis = [];
     /** @var int */
@@ -175,9 +174,9 @@ class Status
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->created_at;
     }
@@ -185,9 +184,26 @@ class Status
     /**
      * @param \DateTime $created_at
      */
-    public function setCreatedAt(\DateTime $created_at): void
+    public function setCreatedAt(?\DateTime $created_at): void
     {
         $this->created_at = $created_at;
+    }
+
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getScheduledAt(): ?\DateTime
+    {
+        return $this->scheduled_at;
+    }
+
+    /**
+     * @param \DateTime $scheduled_at
+     */
+    public function setScheduledAt(\DateTime $scheduled_at): void
+    {
+        $this->scheduled_at = $scheduled_at;
     }
 
     /**
@@ -321,7 +337,7 @@ class Status
     /**
      * @return string
      */
-    public function getSpoilerText(): string
+    public function getSpoilerText(): ?string
     {
         return $this->spoiler_text;
     }
@@ -329,7 +345,7 @@ class Status
     /**
      * @param string $spoiler_text
      */
-    public function setSpoilerText(string $spoiler_text): void
+    public function setSpoilerText(?string $spoiler_text): void
     {
         $this->spoiler_text = $spoiler_text;
     }
