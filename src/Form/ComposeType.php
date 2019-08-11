@@ -36,6 +36,17 @@ class ComposeType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /**@var $user \App\SocialEntity\MastodonAccount**/
+        $user = $options['user'];
+
+        if( $user->getDefaultSensitivity()) {
+            $checkbox = [
+                'required' => false,
+                'attr' => ['checked' => 'checked'],
+            ];
+        }else {
+            $checkbox = ['required' => false];
+        }
 
         $builder->add('content_warning', TextType::class, ['required' => false]);
         $builder->add('content', TextareaType::class, ['required' => false]);
@@ -46,10 +57,11 @@ class ComposeType extends AbstractType {
                     'status.visibility.unlisted' => 'unlisted',
                     'status.visibility.private' => 'private',
                     'status.visibility.direct' => 'direct',
-                ]
+                ],
+                'data' => $user->getDefaultVisibility(),
             ]);
         $builder->add('timeZone', TimezoneType::class);
-        $builder->add('sensitive', CheckboxType::class,  ['required' => false]);
+        $builder->add('sensitive', CheckboxType::class, $checkbox);
         $builder->add('scheduled_at', \Symfony\Component\Form\Extension\Core\Type\DateTimeType::class,[
             'widget' => 'single_text',
             "data" => new \DateTime()
@@ -63,7 +75,8 @@ class ComposeType extends AbstractType {
     {
         $resolver->setDefaults([
             'data_class' => Compose::class,
-            'translation_domain' => 'fediplan'
+            'translation_domain' => 'fediplan',
+            'user' => null
         ]);
     }
 

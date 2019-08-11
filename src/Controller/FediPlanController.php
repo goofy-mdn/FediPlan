@@ -126,7 +126,7 @@ class FediPlanController extends AbstractController
     {
 
         $compose = new Compose();
-        $form = $this->createForm(ComposeType::class, $compose);
+        $form = $this->createForm(ComposeType::class, $compose, ['user' => $this->getUser()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var $data Compose */

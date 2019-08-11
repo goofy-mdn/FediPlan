@@ -1237,6 +1237,16 @@ class Mastodon_api {
                 $MastodonAccount->addField($field);
             }
         }
+        if( $accountParams['source'] && $accountParams['source']['privacy']){
+            $MastodonAccount->setDefaultVisibility($accountParams['source']['privacy']);
+        }else{
+            $MastodonAccount->setDefaultVisibility("public");
+        }
+        if( $accountParams['source'] ){
+            $MastodonAccount->setDefaultSensitivity($accountParams['source']['sensitive']?1:0);
+        }else{
+            $MastodonAccount->setDefaultSensitivity(0);
+        }
         return $MastodonAccount;
     }
 

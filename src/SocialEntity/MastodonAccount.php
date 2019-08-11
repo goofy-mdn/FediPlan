@@ -55,7 +55,9 @@ class MastodonAccount
 
     private $Emojis;
 
+    private $default_sensitivity;
 
+    private $default_visibility;
 
 
     public function __construct()
@@ -386,5 +388,39 @@ class MastodonAccount
         return $this;
     }
 
-    
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultSensitivity()
+    {
+        return $this->default_sensitivity;
+    }
+
+    /**
+     * @param mixed $default_sensitivity
+     */
+    public function setDefaultSensitivity($default_sensitivity): void
+    {
+        $this->default_sensitivity = $default_sensitivity;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultVisibility()
+    {
+        return $this->default_visibility;
+    }
+
+    /**
+     * @param mixed $default_visibility
+     */
+    public function setDefaultVisibility($default_visibility): void
+    {
+        $this->default_visibility = $default_visibility;
+    }
+
+
+
 }
