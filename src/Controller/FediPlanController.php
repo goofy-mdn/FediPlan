@@ -192,7 +192,7 @@ class FediPlanController extends AbstractController
                     'Success',
                     'The message has been scheduled'
                 );
-                $form = $this->createForm(ComposeType::class, $compose);
+                $form = $this->createForm(ComposeType::class, $compose, ['user' => $this->getUser()]);
             }
         }
         $user = $this->getUser();
