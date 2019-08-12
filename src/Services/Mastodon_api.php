@@ -1523,7 +1523,7 @@ class Mastodon_api {
             }
             $status->setEmojis($emojis);
         }
-        $status->setSensitive($statusParams['params']['sensitive']);
+        $status->setSensitive($statusParams['params']['sensitive']?1:0);
         $status->setSpoilerText($statusParams['params']['spoiler_text']);;
         $status->setVisibility($statusParams['params']['visibility']);
         if(  isset($statusParams['media_attachments']) && count($statusParams['media_attachments']) > 0){

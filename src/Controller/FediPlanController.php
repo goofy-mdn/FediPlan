@@ -84,13 +84,37 @@ class FediPlanController extends AbstractController
                 $mastodon_api->set_client($client->getClientId(), $client->getClientSecret());
                 $reply = $mastodon_api->loginAuthorization($code);
                 if( isset($reply['error']) ){
+
+                   /* $access_token = $code;
+                    $token_type = "Bearer";
+                    $mastodon_api->set_url("https://" . $client->getHost());
+                    $mastodon_api->set_token($access_token, $token_type);
+                    try {
+                        $accountReply = $mastodon_api->accounts_verify_credentials();
+                    } catch (\ErrorException $e) {
+                    }
+                    if( isset($accountReply['error']) ){
+                        $form->get('code')->addError(new FormError($translator->trans('error.instance.mastodon_account',[],'fediplan','en')));
+                    }else{
+                        $Account =  $mastodon_api->getSingleAccount($accountReply['response']);
+                        $Account->setInstance($host);
+                        $Account->setToken($token_type ." ".$access_token);
+                        $token = new UsernamePasswordToken($Account, null, 'main', array('ROLE_USER'));
+                        $this->get('security.token_storage')->setToken($token);
+                        $event = new InteractiveLoginEvent($request, $token);
+                        $eventDispatcher->dispatch("security.interactive_login", $event);
+                        return $this->redirectToRoute('schedule');
+                    }*/
                     $form->get('code')->addError(new FormError($translator->trans('error.instance.mastodon_token',[],'fediplan','en')));
                 }else{
                     $access_token = $reply['response']['access_token'];
                     $token_type = $reply['response']['token_type'];
                     $mastodon_api->set_url("https://" . $client->getHost());
                     $mastodon_api->set_token($access_token, $token_type);
-                    $accountReply = $mastodon_api->accounts_verify_credentials();
+                    try {
+                        $accountReply = $mastodon_api->accounts_verify_credentials();
+                    } catch (\ErrorException $e) {
+                    }
                     if( isset($accountReply['error']) ){
                         $form->get('code')->addError(new FormError($translator->trans('error.instance.mastodon_account',[],'fediplan','en')));
                     }else{
