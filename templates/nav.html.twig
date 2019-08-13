@@ -14,7 +14,7 @@
                 </li>
                 {% endif %}
                 {% if is_granted('ROLE_USER') %}
-                <li class="nav-item {% if "articles" in app.request.attributes.get('schedule') %} active {% endif %}">
+                <li class="nav-item {% if app.request.attributes.get('_route') == 'schedule' %}active {% endif %}">
                     <a class="nav-link" href="{{ path('schedule') }}">{{ 'common.schedule'|trans }}</a>
                 </li>
 
