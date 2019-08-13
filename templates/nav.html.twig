@@ -1,3 +1,4 @@
+{% trans_default_domain 'fediplan' %}
 <header>
     <!-- Fixed navbar -->
     <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
@@ -9,20 +10,20 @@
             <ul class="navbar-nav mr-auto">
                 {% if not is_granted('ROLE_USER') %}
                 <li class="nav-item {% if app.request.attributes.get('_route') == 'index' %} active {% endif %}">
-                    <a class="nav-link" href="{{ path('index') }}">Login <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{{ path('index') }}">{{ 'common.login'|trans }} <span class="sr-only">(current)</span></a>
                 </li>
                 {% endif %}
                 {% if is_granted('ROLE_USER') %}
                 <li class="nav-item {% if "articles" in app.request.attributes.get('schedule') %} active {% endif %}">
-                    <a class="nav-link" href="{{ path('schedule') }}">Shedule</a>
+                    <a class="nav-link" href="{{ path('schedule') }}">{{ 'common.schedule'|trans }}</a>
                 </li>
 
                 <li class="nav-item {% if app.request.attributes.get('_route') == 'scheduled' %} active {% endif %}">
-                    <a class="nav-link" href="{{ path('scheduled') }}">scheduled</a>
+                    <a class="nav-link" href="{{ path('scheduled') }}">{{ 'common.scheduled'|trans }}</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('logout') }}" tabindex="-1" >Logout</a>
+                    <a class="nav-link" href="{{ path('logout') }}" tabindex="-1" >{{ 'common.logout'|trans }}</a>
                 </li>
 
                 <li class="nav-item">

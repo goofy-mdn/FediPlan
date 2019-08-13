@@ -5,6 +5,7 @@ common:
   login: Login
   schedule: Schedule
   scheduled: Scheduled
+  logout: Logout
 status:
   visibility:
     public: Public
