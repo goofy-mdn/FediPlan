@@ -4,6 +4,7 @@ common:
   accounts: Accounts
   login: Login
   schedule: Schedule
+  scheduled: Scheduled
 status:
   visibility:
     public: Public
