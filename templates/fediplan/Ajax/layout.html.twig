@@ -29,7 +29,7 @@
                         {% elseif status.visibility == "direct" %}
                             <i class="fa fa-envelope"></i>
                         {% endif %}
-                    </small> - {{ status.scheduledAt | date('d/m/y H:m')   }}
+                    </small> - {{ status.scheduledAt | date('d/m/y H:i')   }}
                     <button class="btn btn-danger small" data-record-id="{{ status.getId() }}"  style="position: absolute;right: 5px;bottom: 5px;"
 
                             data-record-title="{{ status.content }} - {{ status.scheduledAt | date('d/m/y H:m')  }}"

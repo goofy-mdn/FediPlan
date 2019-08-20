@@ -16,7 +16,6 @@ use App\SocialEntity\Compose;
 use App\SocialEntity\MastodonAccount;
 use DateTime;
 use DateTimeZone;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -195,9 +194,9 @@ class FediPlanController extends AbstractController
             $params['sensitive'] = ($data->getSensitive() == null || !$data->getSensitive())?false:true;
 
             try {
-                $date = new DateTime( $data->getScheduledAt()->format("Y-m-d H:i:s"), new DateTimeZone($data->getTimeZone()) );
+                $date = new DateTime( $data->getScheduledAt()->format("Y-m-d H:i"), new DateTimeZone($data->getTimeZone()) );
                 $date->setTimezone(  new DateTimeZone("UTC"));
-                $params['scheduled_at'] = $date->format('c');
+                $params['scheduled_at'] = $date->format(DateTime::ISO8601);
             } catch (\Exception $e) {}
             try {
                 $response = $mastodon_api->post_statuses($params);
