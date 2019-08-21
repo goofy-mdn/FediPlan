@@ -34,7 +34,7 @@ error:
     mastodon_only: Ce n’est pas une instance Mastodon valide !
     mastodon_client_id: Un problème est apparu pendant la recherche de l’identifiant du client
     mastodon_oauth_url: Un problème est apparu pendant la recherche de l’URL d’autorisation
-    mastodon_token: Un problème est apparu pendant la recherche du jeton d’identification
+    mastodon_token: Un problème est apparu pendant la recherche du jeton d’accès
     mastodon_account: Un problème est apparu pendant la recherche du compte
     mastodon_account_already_used: Ce compte est déjà géré par quelqu’un d’autre
 
