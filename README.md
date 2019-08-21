@@ -1,10 +1,10 @@
-### How to install FedipPlan
+### How to install FediPlan
 
-1. Clone the repository
+**1 - Clone the repository**
 
-2. Install vendors:
+**2 - Install vendors:**
 
-`composer install`
+`composer install -o`
 
 PS: You need to install `composer`, just use:
 
@@ -21,10 +21,13 @@ php -r "unlink('composer-setup.php');"
 
 See: [Download Composer](https://getcomposer.org/download/)
 
-### Support My work at [fedilab.app](https://fedilab.app/page/donations/)
+**3 - Public directory:**
 
+Your site needs to target /path/to/FediPlan/public
 
-### TODO:
+#### TODO:
     1. Polls
     2. Autocompletion for mentions, tags and emojis
     3. Check and edit scheduled statuses.
+    
+#### Support My work at [fedilab.app](https://fedilab.app/page/donations/)
