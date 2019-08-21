@@ -1,0 +1,58 @@
+common:
+  next: Suivant
+  previous: Précédent
+  accounts: Compte
+  login: Se connecter
+  schedule: Planifier
+  scheduled: Planifiés
+  logout: Déconnexion
+  about: À propos
+  support_my_work: Soutenez mon travail
+  about_fediplan: Planifiez facilement vos messages avec Mastodon et Pleroma
+  source_code: Code source
+  no_results_found: Aucun résultat trouvé !
+  confirm_delete: Confirmez la suppression
+  delete_message: Vous êtes sur le point de supprimer
+  cancel: Annuler
+  delete: Supprimer
+  proceed_confirm: Voulez-vous vraiment continuer ?
+  start_upload: Débuter le téléversement
+status:
+  visibility:
+    public: Public
+    unlisted: Non listé
+    private: Abonnée⋅e⋅s uniquement
+    direct: Direct
+
+messages:
+  login_authorization: Veuillez cliquer sur « Obtenir un code d’autorisation » pour obtenir le code nécessaire. Puis copiez-collez celui-ci dans le champ de saisie.
+  authorization_get: Obtenir un code d’autorisation
+
+error:
+  general: Oops, une erreur s’est produite !
+  instance:
+    mastodon_only: Ce n’est pas une instance Mastodon valide !
+    mastodon_client_id: Un problème est apparu pendant la recherche de l’identifiant du client
+    mastodon_oauth_url: Un problème est apparu pendant la recherche de l’URL d’autorisation
+    mastodon_token: Un problème est apparu pendant la rceherche du jeton
+    mastodon_account: Un problème est apparu pendant la recherche du compte
+    mastodon_account_already_used: Ce compte est déjà géré par quelqu’un d’autre
+
+
+page:
+  index:
+    about:
+      FediPlan est une application open source (<a href="https://framagit.org/tom79/fediplan" target="_blank">source code</a>) conçue pour vous permettre de planifier vos messages avec <a href="https://joinmastodon.org/" target="_blank">Mastodon</a> ou <a href="https://pleroma.social/" target="_blank">Pleroma</a> (2.7+).
+    data:
+      FediPlan <b>ne conserve aucune donnée</b> (ni jeton d’accès ni messages), c’est pourquoi vous devez créer un nouveau jeton d’accès quand votre session expire.
+  about:
+    scheduling:
+      FediPlan permet aux utilsateurs et utilisatrices de planifier des messages (avec des fichiers médias joints) pour qu’ils soient publiés à une date ultérieure déterminée.<br/>
+      la publication doit être planifiée au moins 5 minutes à l’avance. 300 messages au plus peuvent être planifiés en même temps.
+      Seulement 50 messages peuvent être publiés pour une date donnée.
+    data:
+      FediPlan ne stocke aucun identifiant ni aucun message. Il utilise seulement l’API de API pour <a href="https://docs.joinmastodon.org/api/rest/statuses/#scheduled-status" target="_blank">planifier les messages</a>
+    issues:
+      Vous pouvez signaler les problèmes rencontrés ou demander des améliorations sur <a href="https://github.com/stom79/FediPlan/issues" target="_blank">Github</a> ou <a href="https://framagit.org/tom79/fediplan/issues" target="_blank">Framagit</a>.
+  scheduled:
+    delete:
