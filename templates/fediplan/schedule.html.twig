@@ -174,7 +174,7 @@
             </span>
                         <button type="submit" class="btn btn-primary start">
                             <i class="glyphicon glyphicon-upload"></i>
-                            <span>Start upload</span>
+                            <span>{{ 'common.start_upload'|trans }}</span>
                         </button>
                         <!-- The global file processing state -->
                         <span class="fileupload-process"></span>
@@ -383,7 +383,7 @@
                     setHeader(xhr);
                 },
                 success: function (data) {
-
+                    var message = "{{ 'common.delete'|trans }}";
                     var content;
                     content = ' <div class="row" id="media_container_'+data.id+'">\n' +
                     '                <div class="col-md-4">\n' +
@@ -396,7 +396,7 @@
                     '                <div class="col-md-2">\n' +
                     '                        <button type="button" class="btn btn-danger delete_media" data-id="'+data.id+'">\n' +
                     '                          <i class="glyphicon glyphicon-trash"></i>\n' +
-                    '                          <span>Delete</span>\n' +
+                    '                          <span>'+message+'</span>\n' +
                     '                      </button>\n' +
                     '                </div>\n' +
                     '            </div>'

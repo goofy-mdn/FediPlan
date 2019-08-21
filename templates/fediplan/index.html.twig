@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 {% trans_default_domain 'fediplan' %}
-{% block title %}{{ 'common.login'|trans }}{% endblock %}
+{% block title %}{{ 'common.about_fediplan'|trans }}{% endblock %}
 
 {% block content %}
     {% include 'nav.html.twig' %}
-    <h1>Login</h1>
+    <h1>{{ 'common.login'|trans}}</h1>
 
     {{ form_start(form) }}
     {{ form_row(form._token) }}
@@ -73,8 +73,8 @@
 
 
     <blockquote class="blockquote text-center" style="margin-top: 50px;">
-        <p class="mb-0">FediPlan is an open source application (<a href="https://framagit.org/tom79/fediplan" target="_blank">source code</a>) built for scheduling your messages with <a href="https://joinmastodon.org/" target="_blank">Mastodon</a> or <a href="https://pleroma.social/" target="_blank">Pleroma</a> (2.7+).</p>
-        <p>It <b>does not store any data</b> (token or messages), that is why you need to create a new Token when your session expired.</p>
+        <p class="mb-0">{{ 'page.index.about'|trans |raw}}</p>
+        <p>{{ 'page.index.data'|trans |raw}}</p>
         <footer class="blockquote-footer">FediPlan 1.0.0</footer>
     </blockquote>
 

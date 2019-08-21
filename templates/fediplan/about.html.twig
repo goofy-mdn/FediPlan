@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain 'fediplan' %}
+{% block title %}{{ 'common.about'|trans }}{% endblock %}
+
+{% block content %}
+    {% include 'nav.html.twig' %}
+    <h1>About</h1>
+
+    <div class="row well">
+        <div class="col-md-8 jumbotron">
+            {{ 'page.about.scheduling'|trans  |raw}}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 alert alert-primary" role="alert">
+            {{ 'page.about.data'|trans |raw}}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 alert alert-success" role="alert">
+            {{ 'page.about.issues'|trans |raw}}
+        </div>
+    </div>
+
+{% endblock %}

@@ -290,6 +290,14 @@ class FediPlanController extends AbstractController
     }
 
     /**
+     * @Route("/about", name="about")
+     */
+    public function about()
+    {
+        return $this->render("fediplan/about.html.twig");
+    }
+
+    /**
      * @Route("/logout", name="logout")
      */
     public function logout()

@@ -6,6 +6,17 @@ common:
   schedule: Schedule
   scheduled: Scheduled
   logout: Logout
+  about: About
+  support_my_work: Support my work
+  about_fediplan: Safely schedule messages with Mastodon and Pleroma
+  source_code: Source code
+  no_results_found: No results found!
+  confirm_delete: Confirm Delete
+  delete_message: You are about to delete
+  cancel: Cancel
+  delete: Delete
+  proceed_confirm: Do you want to proceed?
+  start_upload: Start upload
 status:
   visibility:
     public: Public
@@ -26,3 +37,22 @@ error:
     mastodon_token: Something went wrong when getting the token!
     mastodon_account: Something went wrong when retrieving the account!
     mastodon_account_already_used: This account is already managed by someone else!
+
+
+page:
+  index:
+    about:
+      FediPlan is an open source application (<a href="https://framagit.org/tom79/fediplan" target="_blank">source code</a>) built for scheduling your messages with <a href="https://joinmastodon.org/" target="_blank">Mastodon</a> or <a href="https://pleroma.social/" target="_blank">Pleroma</a> (2.7+).
+    data:
+      It <b>does not store any data</b> (token or messages), that is why you need to create a new Token when your session expired.
+  about:
+    scheduling:
+      FediPlan allows users to schedule a message (with media attachments) to be published at a certain future date.<br/>
+      The scheduled date must be at least 5 minutes into the future. At most, 300 statuses can be scheduled at the same time.
+      Only 50 statuses can be scheduled for any given day.
+    data:
+      FediPlan does not store your scheduled messages nor your credentials. It only uses the Mastodon API for <a href="https://docs.joinmastodon.org/api/rest/statuses/#scheduled-status" target="_blank">scheduling messages</a>
+    issues:
+      You can report issues or ask improvements on <a href="https://github.com/stom79/FediPlan/issues" target="_blank">Github</a> or <a href="https://framagit.org/tom79/fediplan/issues" target="_blank">Framagit</a>.
+  scheduled:
+    delete:
